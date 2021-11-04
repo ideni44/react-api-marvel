@@ -10,23 +10,31 @@ import ErrorMessage from '../errorMessage/ErrorMessage'
 class CharList extends Component {
     state = {
         charList:[],
-        // loading:true,
-        // error:false
+        loading:true,
+        error:false,
+        newItemLoading:false,
+        offset:210
+
     }
 
     marvelService = new MarvelService()
     
     componentDidMount(){
-        this.marvelService
-            .getAllCharacters()
-            .then(charList => this.onCharListLoaded(charList))
-            .catch(this.onError)
+        this.onRequest()
     }
 
-    onCharListLoaded = (charList) => {
+    onCharListLoaded = (newCharList) => {
+        this.setState(({charList,offset})=>({
+            charList:[...charList,...newCharList],
+            loading:false,
+            newItemLoading:false,
+            offset:offset+9
+        }))
+    }
+
+    onCharListLoading = () => {
         this.setState({
-            charList,
-            loading:false
+            newItemLoading:true
         })
     }
 
@@ -34,9 +42,16 @@ class CharList extends Component {
         this.setState({loading:false,error:true})
     }
 
+    onRequest = (offset) => {
+        this.onCharListLoading()
+        this.marvelService
+            .getAllCharacters(offset)
+            .then(charList => this.onCharListLoaded(charList))
+            .catch(this.onError)
+    }
+
     renderItems(arr){
         const items = arr.map(i=>{
-            // console.log(i)
             const{name,thumbnail} = i
             let imgStyle = {'objectFit':'cover'}
             if(thumbnail == 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'){
@@ -56,7 +71,7 @@ class CharList extends Component {
         )
     }
     render(){
-        const{charList,loading,error} = this.state
+        const{charList,loading,error,offset,newItemLoading} = this.state
         const items = this.renderItems(charList)
 
         const errorMessage = error ? <ErrorMessage/> : null
@@ -68,7 +83,7 @@ class CharList extends Component {
                 {errorMessage}
                 {spinner}
                 {content}
-            <button className="button button__main button__long">
+            <button className="button button__main button__long" disabled={newItemLoading} onClick={()=>this.onRequest(offset)}>
                 <div className="inner">load more</div>
             </button>
         </div>)
