@@ -1,6 +1,5 @@
 import './charInfo.scss'
-import thor from '../../resources/thor.jpeg'
-import { Component, useState, useEffect} from 'react'
+import { useState, useEffect} from 'react'
 import MarvelService from '../../services/MarvelService'
 import Skeleton from '../skeleton/Skeleton'
 import Spinner from '../spinner/Spinner'
@@ -48,7 +47,7 @@ const CharInfo = (props) => {
     const errorMessage = error ? <ErrorMessage/> : null
     const spinner = loading ? <Spinner/> : null
     const content = !(loading || error || !char) ? <View char={char}/> : null
-    
+
     return(
         <div className="char__info">
             {skeleton}
