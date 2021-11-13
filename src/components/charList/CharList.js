@@ -5,6 +5,7 @@ import MarvelService from '../../services/MarvelService'
 
 import Spinner from '../spinner/Spinner'
 import ErrorMessage from '../errorMessage/ErrorMessage' 
+import useMarvelService from '../../services/MarvelService'
 
 
 const CharList = (props) =>{
@@ -15,7 +16,7 @@ const CharList = (props) =>{
     const[newItemLoading,setNewItemLoading]=useState(false)
     const[offset,setOffset]=useState(210)
 
-    const marvelService = new MarvelService()
+    const marvelService = useMarvelService()
     
     useEffect(()=>{
         onRequest()

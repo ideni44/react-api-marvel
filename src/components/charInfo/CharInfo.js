@@ -4,6 +4,7 @@ import MarvelService from '../../services/MarvelService'
 import Skeleton from '../skeleton/Skeleton'
 import Spinner from '../spinner/Spinner'
 import ErrorMessage from '../errorMessage/ErrorMessage' 
+import useMarvelService from '../../services/MarvelService'
 
 const CharInfo = (props) => {
 
@@ -11,7 +12,7 @@ const CharInfo = (props) => {
     const [loading,setLoading] = useState(false)
     const [error,setError] = useState(false)
 
-    const marvelService = new MarvelService()
+    const marvelService = useMarvelService()
 
 
     useEffect(()=>{
