@@ -1,8 +1,5 @@
 import './charList.scss'
-import abyss from '../../resources/abyss.jpg'
-import { Component, useEffect, useState } from 'react'
-import MarvelService from '../../services/MarvelService'
-
+import { useEffect, useState } from 'react'
 import Spinner from '../spinner/Spinner'
 import ErrorMessage from '../errorMessage/ErrorMessage' 
 import useMarvelService from '../../services/MarvelService'
@@ -11,12 +8,9 @@ import useMarvelService from '../../services/MarvelService'
 const CharList = (props) =>{
 
     const[charList,setCharList]=useState([])
-    const[loading,setLoading]=useState(true)
-    const[error,setError]=useState(false)
     const[newItemLoading,setNewItemLoading]=useState(false)
     const[offset,setOffset]=useState(210)
-
-    const marvelService = useMarvelService()
+    const {loading,error,getAllCharacters} = useMarvelService()
     
     useEffect(()=>{
         onRequest()
@@ -24,7 +18,6 @@ const CharList = (props) =>{
 
     const onCharListLoaded = (newCharList) => {
         setCharList(charList => [...charList,...newCharList])
-        setLoading(false)
         setNewItemLoading(false)
         setOffset(offset => offset+9)
     }
@@ -33,17 +26,10 @@ const CharList = (props) =>{
         setNewItemLoading(true)
     }
 
-    const onError = () => {
-        setLoading(false)
-        setError(true)
-    }
-
     const onRequest = (offset) => {
         onCharListLoading()
-        marvelService
-            .getAllCharacters(offset)
+        getAllCharacters(offset)
             .then(charList => onCharListLoaded(charList))
-            .catch(onError)
     }
 
     function renderItems(arr){
